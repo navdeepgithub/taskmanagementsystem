@@ -6,20 +6,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TasksModule = void 0;
+exports.TasksService = void 0;
 const common_1 = require("@nestjs/common");
-const tasks_controller_1 = require("./tasks.controller");
-const tasks_service_1 = require("./tasks.service");
-let TasksModule = (() => {
-    let TasksModule = class TasksModule {
+let TasksService = (() => {
+    let TasksService = class TasksService {
     };
-    TasksModule = __decorate([
-        common_1.Module({
-            controllers: [tasks_controller_1.TasksController],
-            providers: [tasks_service_1.TasksService]
-        })
-    ], TasksModule);
-    return TasksModule;
+    TasksService = __decorate([
+        common_1.Injectable()
+    ], TasksService);
+    return TasksService;
 })();
-exports.TasksModule = TasksModule;
-//# sourceMappingURL=tasks.module.js.map
+exports.TasksService = TasksService;
+//# sourceMappingURL=tasks.service.js.map
