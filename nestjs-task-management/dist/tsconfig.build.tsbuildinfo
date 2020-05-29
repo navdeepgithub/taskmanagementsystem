@@ -1136,13 +1136,18 @@
         "signature": "20ee20a65a201299c1f4ba6fe931f3ad46d67e8a8cc2a52b9d162bb77aca23e6",
         "affectsGlobalScope": false
       },
+      "../src/tasks/tasks.controller.ts": {
+        "version": "87062543042e8df4333cbd497ecbaeb4e3e7e654f98b24002c39309324a8c6fb",
+        "signature": "2d4f86e447887af0f3df46eef81d786b97bc1e4302a048263c87649870a55184",
+        "affectsGlobalScope": false
+      },
       "../src/tasks/tasks.module.ts": {
-        "version": "f82516bc7a81e0f272da973c5cb0d634ebd48b179af7b4ff2d616213b03bb5a3",
+        "version": "8317503dc9108ee53bc6d7c28c6ef0f2125ccde85da38e348685e09a61a78903",
         "signature": "ea1c4783c6622473a62fccd9b4ae61a34ba8ef2e1561f6f66d0260cdd232b10e",
         "affectsGlobalScope": false
       },
       "../src/app.module.ts": {
-        "version": "fc60c1ffd4d957a8f773ab5ad3dd933a56f811e02cce6024eeadb719e3ecf90f",
+        "version": "923bec174ce2b176e7d0c94779c0780f87414acbb36028a2d74ba1ab57165573",
         "signature": "9fc7f7b6ad854404973b8cba8e6d883f758237991968e9a3965d716d46f1da88",
         "affectsGlobalScope": false
       },
@@ -5076,13 +5081,22 @@
         "../node_modules/@types/node/util.d.ts",
         "../src/app.module.ts"
       ],
-      "../src/tasks/tasks.module.ts": [
+      "../src/tasks/tasks.controller.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts"
+      ],
+      "../src/tasks/tasks.module.ts": [
+        "../node_modules/@nestjs/common/index.d.ts",
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts",
+        "../src/tasks/tasks.controller.ts"
       ]
     },
     "exportedModulesMap": {
@@ -8673,6 +8687,7 @@
       "../node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "../src/app.module.ts",
       "../src/main.ts",
+      "../src/tasks/tasks.controller.ts",
       "../src/tasks/tasks.module.ts"
     ]
   },
