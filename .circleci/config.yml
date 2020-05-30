@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: 'ls -l'
+          command: cd ~/nestjs-task-management && 'ls -l'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       
