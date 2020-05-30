@@ -4,7 +4,6 @@ jobs:
   build:
     docker:
       - image: circleci/node:10.16.3
-    working_directory: ~/taskmanagementsystem/nestjs-task-management
     steps:
       - checkout
       - run:
