@@ -1,23 +1,15 @@
 version: 2
 jobs:
   build-and-test:
+    working_directory: ~/taskmanagementsystem
     docker:
     - image: circleci/node:latest
     steps:
     - checkout
-    - restore_cache:
-        keys:
-        - node-deps-v1-{{ .Branch }}-{{ checksum "package.json" }}
-        - node-deps-v1-{{ .Branch }}
-        - node-deps-v1
     - run:
         command: cd nestjs-task-managment && npm install
     - run:
-        command: cd nestjs-task-managment && yarn start:dev
-    - save_cache:
-        key: node-deps-v1-{{ .Branch }}-{{ checksum "package.json" }}
-        paths:
-        - ~/project/node_modules
+        command: cd nestjs-task-managment && nest --version
 workflows:
   build-and-test:
     jobs:
