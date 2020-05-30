@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build-and-test:
-    working_directory: ~/nestjs-task-management
     docker:
     - image: circleci/node:latest
     steps:
