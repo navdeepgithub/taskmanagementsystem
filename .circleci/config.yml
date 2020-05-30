@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: update-npm
-          command: cd nestjs-task-management && npm install -g npm@5
+          command: cd nestjs-task-management && sudo npm install -g npm@5
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       - run:
