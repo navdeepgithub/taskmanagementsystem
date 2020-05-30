@@ -7,9 +7,9 @@ jobs:
     steps:
     - checkout
     - run:
-        command: cd nestjs-task-managment && npm install
+        command: cd taskmanagementsystem/nestjs-task-managment && npm install
     - run:
-        command: cd nestjs-task-managment && nest --version
+        command: cd taskmanagementsystem/nestjs-task-managment && nest --version
 workflows:
   build-and-test:
     jobs:
