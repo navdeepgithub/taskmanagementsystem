@@ -5,12 +5,11 @@ jobs:
     working_directory: ~/nestjs-task-management
     docker:
       - image: circleci/node:10.16.3
-      - image: mongo:4.2.0
     steps:
       - checkout
       - run:
           name: update-npm
-          command: 'sudo npm install -g npm@5'
+          command: 'sudo npm install'
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       
