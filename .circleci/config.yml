@@ -4,12 +4,12 @@ jobs:
   build:
     docker:
       - image: circleci/node:10.16.3
-    working_directory: ~/nestjs-task-management
+    working_directory: ~/taskmanagementsystem/nestjs-task-management
     steps:
       - checkout
       - run:
           name: update-npm
-          command: cd ~/nestjs-task-management && npm install
+          command: cd ~/taskmanagementsystem/nestjs-task-management && npm install
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
       
