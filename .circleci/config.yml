@@ -2,9 +2,9 @@
 version: 2.1
 jobs:
   build:
-    working_directory: ~/nestjs-task-management
     docker:
       - image: circleci/node:10.16.3
+    working_directory: ~/nestjs-task-management
     steps:
       - checkout
       - run:
