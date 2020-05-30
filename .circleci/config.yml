@@ -25,7 +25,7 @@ jobs:
       - checkout
       - run:
           name: run test
-          command: cd nestjs-task-management && npm test
+          command: cd nestjs-task-management && npm i && npm test
 
 workflows:
   version: 2
