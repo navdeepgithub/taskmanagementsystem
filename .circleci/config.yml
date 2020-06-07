@@ -1,4 +1,3 @@
-  
 version: 2.1
 jobs:
   build:
@@ -34,4 +33,4 @@ workflows:
       - build
       - test:
           requires:
-          - build
+            - build
