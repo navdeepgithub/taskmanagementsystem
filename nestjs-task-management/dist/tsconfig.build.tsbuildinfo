@@ -1136,18 +1136,23 @@
         "signature": "20ee20a65a201299c1f4ba6fe931f3ad46d67e8a8cc2a52b9d162bb77aca23e6",
         "affectsGlobalScope": false
       },
+      "../src/tasks/tasks.model.ts": {
+        "version": "91352ce88284cc54ce0d9bc6b51b51e4a11e176d21d8938c41f9cb908033b8b4",
+        "signature": "073608c48a2ed2fb16337457c2fb8c170f6781dd05fd5c8e88e3753938588899",
+        "affectsGlobalScope": false
+      },
       "../src/tasks/tasks.service.ts": {
-        "version": "6ad216726c0783fdd7c93b07c66ec7b437deff505473d4f9d5ea0f95bf78ff61",
-        "signature": "e264f819f2fa9019183bd5ea8e04c9097c7817be1f9f66f22b76c6f5d0692208",
+        "version": "58040e979624e094a00249f112ccf72630fa1aa239289257d4e2a4540659b089",
+        "signature": "b65e96dcb6a31900476f9574ee410a5cbb904ac3c9db517917b7a4ec8183f556",
         "affectsGlobalScope": false
       },
       "../src/tasks/tasks.controller.ts": {
-        "version": "cc6ebdf97c64318996fe65e88d6adcb72cbb9ce5d471e2af44215eb4051b1394",
-        "signature": "c74950591829a9669410ff84f14c4c361a2df896b0378746ad5f49beeb954858",
+        "version": "4ea9d468e9da7f425a6ea2ae0d78f897429b0b91a85c57389a941c4b35d210b4",
+        "signature": "a47fd5f34648309e2ec7d7a87a49753af7409a706fc436ec60efc8ab2f7d8e72",
         "affectsGlobalScope": false
       },
       "../src/tasks/tasks.module.ts": {
-        "version": "8c437d9c6dc22e263f654690c15644bb0293f35a0f6775aa075b264e632a9998",
+        "version": "47632da7d4a70ba54bfcd60e1096e83af339e6b708cfcb789b1ec418559832fc",
         "signature": "ea1c4783c6622473a62fccd9b4ae61a34ba8ef2e1561f6f66d0260cdd232b10e",
         "affectsGlobalScope": false
       },
@@ -5090,10 +5095,19 @@
         "../node_modules/@nestjs/common/index.d.ts",
         "../node_modules/@types/graceful-fs/index.d.ts",
         "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/http.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
         "../node_modules/@types/node/util.d.ts",
+        "../src/tasks/tasks.model.ts",
         "../src/tasks/tasks.service.ts"
+      ],
+      "../src/tasks/tasks.model.ts": [
+        "../node_modules/@types/graceful-fs/index.d.ts",
+        "../node_modules/@types/node/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/fs.d.ts",
+        "../node_modules/@types/node/ts3.2/util.d.ts",
+        "../node_modules/@types/node/util.d.ts"
       ],
       "../src/tasks/tasks.module.ts": [
         "../node_modules/@nestjs/common/index.d.ts",
@@ -5111,7 +5125,8 @@
         "../node_modules/@types/node/fs.d.ts",
         "../node_modules/@types/node/ts3.2/fs.d.ts",
         "../node_modules/@types/node/ts3.2/util.d.ts",
-        "../node_modules/@types/node/util.d.ts"
+        "../node_modules/@types/node/util.d.ts",
+        "../src/tasks/tasks.model.ts"
       ]
     },
     "exportedModulesMap": {
@@ -8338,7 +8353,11 @@
         "../node_modules/@types/node/util.d.ts"
       ],
       "../src/tasks/tasks.controller.ts": [
+        "../src/tasks/tasks.model.ts",
         "../src/tasks/tasks.service.ts"
+      ],
+      "../src/tasks/tasks.service.ts": [
+        "../src/tasks/tasks.model.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -8706,6 +8725,7 @@
       "../src/app.module.ts",
       "../src/main.ts",
       "../src/tasks/tasks.controller.ts",
+      "../src/tasks/tasks.model.ts",
       "../src/tasks/tasks.module.ts",
       "../src/tasks/tasks.service.ts"
     ]
