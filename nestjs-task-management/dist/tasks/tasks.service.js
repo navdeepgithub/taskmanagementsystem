@@ -18,7 +18,30 @@ let TasksService = (() => {
         getAllTasks() {
             return this.tasks;
         }
-        createTask(title, description) {
+        getTaskById(id) {
+            return this.tasks.find(task => task.id === id);
+        }
+        getTaskWithFilters(filterDto) {
+            const { status, search } = filterDto;
+            let tasks = this.getAllTasks();
+            if (status) {
+                tasks = tasks.filter(task => task.status === status);
+            }
+            if (search) {
+                tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
+            }
+            return tasks;
+        }
+        deleteTaskById(id) {
+            this.tasks = this.tasks.filter(task => task.id !== id);
+        }
+        updateTaskById(id, status) {
+            const task = this.getTaskById(id);
+            task.status = status;
+            return task;
+        }
+        createTask(createTaskDto) {
+            const { title, description } = createTaskDto;
             const task = {
                 id: uuid_1.v4(),
                 title,
