@@ -1,4 +1,6 @@
+import { Task } from './tasks.model';
 export declare class TasksService {
     private tasks;
-    getAllTasks(): any[];
+    getAllTasks(): Task[];
+    createTask(title: string, description: string): Task;
 }
