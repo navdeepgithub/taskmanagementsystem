@@ -31,6 +31,13 @@ jobs:
       - run: mkdir -p docker-cache
       - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
       - run: ls -al
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: workspace
+          # Must be relative path from root
+          paths:
+            - docker-cache
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
