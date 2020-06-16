@@ -24,6 +24,9 @@ jobs:
       - setup_remote_docker
       - run: docker login -u navdeepsinghghotra -p Infy@123
       - run: docker version #build -f ~/workspace/dockerfile .
+      - run:
+          name: use the dockerfile
+          command: cd nestjs-task-management && build -f ./dockerfile .
 
   test:
     <<: *workdirAndImage
