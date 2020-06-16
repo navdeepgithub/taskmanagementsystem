@@ -21,7 +21,9 @@ jobs:
       - run: |
           cd ~/workspace/repo/  
           ls -al
-      - run: docker login -u navdeepsinghghotra -p Infy@123
+      - run: |
+          sudo service docker start
+          docker login -u navdeepsinghghotra -p Infy@123
       #- run: docker version #build -f ~/workspace/dockerfile .
 
   test:
