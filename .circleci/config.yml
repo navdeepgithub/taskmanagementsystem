@@ -19,15 +19,13 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/workspace
-      - run: |
-          cd ~/workspace/repo/  
-          ls -al
+      - run: ls -al
       - setup_remote_docker
       - run: docker login -u navdeepsinghghotra -p Infy@123
       - run: docker version #build -f ~/workspace/dockerfile .
       - run:
           name: use the dockerfile
-          command: docker build -f dockerfile .
+          command: docker build -f ./dockerfile .
 
   test:
     <<: *workdirAndImage
