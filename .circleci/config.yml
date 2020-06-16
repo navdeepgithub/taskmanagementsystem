@@ -15,10 +15,10 @@ jobs:
             - repo/
   build:
     <<: *workdirAndImage 
+    working_directory: ~/workspace/repo
     steps:
-      - checkout
       - attach_workspace:
-          at: ~/workspace/repo/
+          at: ~/workspace
       - run: |
           cd ~/workspace/repo/  
           ls -al
