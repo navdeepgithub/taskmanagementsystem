@@ -30,7 +30,7 @@ jobs:
       - run: docker image ls
       - run: mkdir -p docker-cache
       - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
-      
+      - run: ls -al
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
