@@ -40,7 +40,7 @@ jobs:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
           # taken to be the root directory of the workspace.
           root: /root/workspace/repo
-          # Must be relative path from root
+          # Must be relative path from r oot
           paths:
             - ./docker-cache/
       - run: pwd
