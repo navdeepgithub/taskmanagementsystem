@@ -77,7 +77,7 @@ jobs:
       - run: docker load < docker-cache/built-image.tar
       - run: docker image ls
       - run: docker login -u navdeepsinghghotra -p Infy@123
-      - run: docker push my_app:$CIRCLE_BRANCH
+      - run: docker push navdeepsinghghotra/my_app:$CIRCLE_BRANCH
       #- run: |
       #    TAG=0.1.$CIRCLE_BUILD_NUM
       #    docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
