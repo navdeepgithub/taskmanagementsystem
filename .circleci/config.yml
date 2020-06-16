@@ -22,9 +22,7 @@ jobs:
           cd ~/workspace/repo/  
           ls -al
       - setup_remote_docker
-      - run: |
-          service docker start
-          docker login -u navdeepsinghghotra -p Infy@123
+      - run: docker login -u navdeepsinghghotra -p Infy@123
       #- run: docker version #build -f ~/workspace/dockerfile .
 
   test:
