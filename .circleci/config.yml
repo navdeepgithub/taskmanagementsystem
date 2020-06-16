@@ -1,5 +1,5 @@
 defaults: &workdirAndImage
-  working_directory: ~/infraops-docker-infra
+  working_directory: ~/workspace
   docker:
     - image: docker:17.05.0-ce-git
 version: 2
@@ -8,30 +8,77 @@ jobs:
     <<: *workdirAndImage
     steps: 
       - checkout:
-          path: ~/infraops-docker-infra/
+          path: ~/workspace
       - persist_to_workspace:
-          root: /tmp/dir
+          root: /workspace
           paths:
-            - images
+            - repo/
   build:
     <<: *workdirAndImage 
+    working_directory: ~/workspace/repo
     steps:
-      - run: docker build -f ./dockerfile .
-
+      - run: pwd
+      - checkout
+      - run: pwd
+      - attach_workspace:
+          at: ~/workspace
+      - run: pwd
+      - run: ls -al
+      - setup_remote_docker
+      - run: docker login -u navdeepsinghghotra -p Infy@123
+      - run: docker version #build -f ~/workspace/dockerfil e .
+      - run:
+          name: use the dockerfile
+          command: docker build -f ./dockerfile -t my_app:$CIRCLE_BRANCH .
+      - run: docker image ls
+      - run: mkdir -p docker-cache
+      - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
+      - run: pwd
+      - run: ls -al
+      - run: pwd
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
+          # taken to be the root directory of the workspace.
+          root: /root/workspace/repo
+          # Must be relative path from r oot
+          paths:
+            - ./docker-cache/
+      - run: pwd
+      - run: ls -al
   test:
     <<: *workdirAndImage
+    working_directory: ~/workspace/repo
     steps:
-      - run: docker image ls
+      - run: pwd
+      - run: ls -al
+      - attach_workspace:
+          at: /root/workspace/repo
+      - run: pwd
+      - run: ls -al
+      - setup_remote_docker    
+      - run: 
+          name: Deploy
+          command: |
+            docker load < docker-cache/built-image.tar
+            docker image ls
+      #- setup_remote_docker
+      #- run: docker image ls
+      
   push_docker_image:
     <<: *workdirAndImage
+    working_directory: ~/workspace/repo
     steps:
-      - run: docker login -u dockerhubusername -p dockerhubpassword
-      - run: docker push IMAGENAME/TAG
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push CircleCI-Public/circleci-demo-docker:$TAG 
+      - run: pwd
+      - run: ls -al
+      - attach_workspace:
+          at: /root/workspace/repo
+      - run: docker login -u navdeepsinghghotra -p Infy@123
+      - run: docker push my_app:$CIRCLE_BRANCH
+      #- run: |
+      #    TAG=0.1.$CIRCLE_BUILD_NUM
+      #    docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
+      #    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      #    docker push CircleCI-Public/circleci-demo-docker:$TAG 
 
 workflows:
   version: 2
