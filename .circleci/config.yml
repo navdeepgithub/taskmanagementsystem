@@ -28,20 +28,19 @@ jobs:
           name: use the dockerfile
           command: docker build -f ./dockerfile -t my_app:$CIRCLE_BRANCH .
       - run: docker image ls
-      - run: mkdir -p docker-cache-{$CIRCLE_SHA1}
-      - run: docker save -o docker-cache-{$CIRCLE_SHA1}/built-image.tar my_app:$CIRCLE_BRANCH
+      - run: mkdir -p docker-cache
+      - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
       - save_cache:
-          key: docker_cache_key-{$CIRCLE_SHA1}
+          key: docker_cache_key
           paths:
-            - docker-cache-{$CIRCLE_SHA1}
-            
+            - docker-cache
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
     steps:
       - restore_cache:
           keys:
-            - docker-cache-{$CIRCLE_SHA1}
+            - docker_cache
       - attach_workspace:
           at: ./
       - run: ls -al
@@ -49,8 +48,9 @@ jobs:
       - run: 
           name: Deploy
           command: |
-            docker load < docker-cache-{$CIRCLE_SHA1}/built-image.tar
+            docker load < docker-cache/built-image.tar
             docker image ls
+            rm -f < docker-cache/built-image.tar
       #- setup_remote_docker
       #- run: docker image ls
       
@@ -60,7 +60,7 @@ jobs:
       - run: docker login -u dockerhubusername -p dockerhubpassword
       - run: docker push IMAGENAME/TAG
       #- run: |
-      #    TAG=0.1.$CIRCLE_BUILD_NUM 
+      #    TAG=0.1.$CIRCLE_BUILD_NUM
       #    docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
       #    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       #    docker push CircleCI-Public/circleci-demo-docker:$TAG 
