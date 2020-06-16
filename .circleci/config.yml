@@ -35,6 +35,7 @@ jobs:
 
   test:
     <<: *workdirAndImage
+    working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
           at: ./
