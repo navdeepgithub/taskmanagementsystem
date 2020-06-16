@@ -27,7 +27,7 @@ jobs:
       - run:
           name: use the dockerfile
           command: docker build -f ./dockerfile .
-      #- run: docker image ls
+      - run: docker image ls
       - persist_to_workspace:
                     root: ./
                     paths:
