@@ -50,8 +50,9 @@ jobs:
     working_directory: ~/workspace/repo
     steps:
       - run: pwd
+      - run: ls -al
       - attach_workspace:
-          at: root/workspace/repo
+          at: /root/workspace/repo
       - run: pwd
       - run: ls -al
       - setup_remote_docker    
