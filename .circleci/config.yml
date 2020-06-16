@@ -28,7 +28,7 @@ jobs:
           name: use the dockerfile
           command: docker build -f ./dockerfile -t my_app:$CIRCLE_BRANCH .
       - run: docker image ls
-      - run: mkdir -p docker-cache
+      - run: mkdir -p docker-cache-{$CIRCLE_SHA1}
       - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
       - save_cache:
           key: docker_cache_key
