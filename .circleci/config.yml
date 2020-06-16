@@ -17,9 +17,12 @@ jobs:
     <<: *workdirAndImage 
     working_directory: ~/workspace/repo
     steps:
+      - run: pwd
       - checkout
+      - run: pwd
       - attach_workspace:
           at: ~/workspace
+      - run: pwd
       - run: ls -al
       - setup_remote_docker
       - run: docker login -u navdeepsinghghotra -p Infy@123
@@ -30,20 +33,26 @@ jobs:
       - run: docker image ls
       - run: mkdir -p docker-cache
       - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
+      - run: pwd
       - run: ls -al
+      - run: pwd
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
           # taken to be the root directory of the workspace.
-          root: cachedimage
+          root: ./cachedimage
           # Must be relative path from root
           paths:
             - docker-cache
+      - run: pwd
+      - run: ls -al
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
     steps:
+      - run: pwd
       - attach_workspace:
           at: ~/workspace/cachedimage
+      - run: pwd
       - run: ls -al
       - setup_remote_docker    
       - run: 
