@@ -21,7 +21,8 @@ jobs:
       - run: |
           cd ~/workspace/repo/  
           ls -al
-      - run: docker version #build -f ~/workspace/dockerfile .
+      - run: docker login -u navdeepsinghghotra -p Infy@123
+      #- run: docker version #build -f ~/workspace/dockerfile .
 
   test:
     <<: *workdirAndImage
