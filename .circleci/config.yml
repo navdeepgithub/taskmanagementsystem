@@ -34,6 +34,7 @@ jobs:
           key: docker_cache_key
           paths:
             - docker-cache
+          force: yes
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
