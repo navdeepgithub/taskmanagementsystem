@@ -21,6 +21,7 @@ jobs:
       - run: |
           cd ~/workspace/repo/  
           ls -al
+      - setup_remote_docker
       - run: |
           service docker start
           docker login -u navdeepsinghghotra -p Infy@123
