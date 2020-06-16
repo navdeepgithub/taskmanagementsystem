@@ -16,7 +16,7 @@ jobs:
   build:
     <<: *workdirAndImage 
     steps:
-      - run: docker build -f ./dockerfile .
+      - run: docker build -f ~/taskmanagementsystem/dockerfile .
 
   test:
     <<: *workdirAndImage
