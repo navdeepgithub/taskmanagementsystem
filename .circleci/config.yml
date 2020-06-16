@@ -16,6 +16,7 @@ jobs:
   build:
     <<: *workdirAndImage 
     steps:
+      - checkout
       - attach_workspace:
           at: ~/workspace/repo/
       - run: |
