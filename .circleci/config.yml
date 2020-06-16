@@ -1,5 +1,5 @@
 defaults: &workdirAndImage
-  working_directory: ~/infraops-docker-infra
+  working_directory: ~/taskmanagementsystem
   docker:
     - image: docker:17.05.0-ce-git
 version: 2
@@ -8,7 +8,7 @@ jobs:
     <<: *workdirAndImage
     steps: 
       - checkout:
-          path: ~/infraops-docker-infra/
+          path: ~/taskmanagementsystem
       - persist_to_workspace:
           root: /tmp/dir
           paths:
@@ -27,11 +27,11 @@ jobs:
     steps:
       - run: docker login -u dockerhubusername -p dockerhubpassword
       - run: docker push IMAGENAME/TAG
-      - run: |
-          TAG=0.1.$CIRCLE_BUILD_NUM
-          docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
-          echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-          docker push CircleCI-Public/circleci-demo-docker:$TAG 
+      #- run: |
+      #    TAG=0.1.$CIRCLE_BUILD_NUM
+      #    docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
+      #    echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+      #    docker push CircleCI-Public/circleci-demo-docker:$TAG 
 
 workflows:
   version: 2
