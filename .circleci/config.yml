@@ -50,7 +50,7 @@ jobs:
           command: |
             docker load < docker-cache/built-image.tar
             docker image ls
-            rm -r < docker-cache/
+            rm -f < docker-cache/built-image.tar
       #- setup_remote_docker
       #- run: docker image ls
       
