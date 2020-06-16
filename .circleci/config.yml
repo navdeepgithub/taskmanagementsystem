@@ -1,5 +1,5 @@
 defaults: &workdirAndImage
-  working_directory: ~/taskmanagementsystem
+  working_directory: ~/workspace
   docker:
     - image: docker:17.05.0-ce-git
 version: 2
@@ -8,16 +8,17 @@ jobs:
     <<: *workdirAndImage
     steps: 
       - checkout:
-          path: ~/taskmanagementsystem
+          path: ~/workspace
       - persist_to_workspace:
-          root: /tmp/dir
+          root: /workspace
           paths:
-            - images
+            - repo/
   build:
     <<: *workdirAndImage 
     steps:
-      - run: 
-          command: ls -al
+      - attach_workspace:
+          at: ~/workspace
+      - run: ls -al
       - run: docker build -f ./dockerfile .
 
   test:
