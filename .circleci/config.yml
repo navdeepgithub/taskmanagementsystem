@@ -27,13 +27,21 @@ jobs:
       - run:
           name: use the dockerfile
           command: docker build -f ./dockerfile .
-      - run: docker image ls
+      #- run: docker image ls
+      - persist_to_workspace:
+                    root: ./
+                    paths:
+                        - ./
 
   test:
     <<: *workdirAndImage
     steps:
       - attach_workspace:
-          at: ~/workspace
+          at: ./
+      - run: 
+          name: Deploy
+          command: |
+            docker image ls
       #- setup_remote_docker
       #- run: docker image ls
       
