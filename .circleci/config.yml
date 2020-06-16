@@ -26,17 +26,19 @@ jobs:
       - run: docker version #build -f ~/workspace/dockerfile .
       - run:
           name: use the dockerfile
-          command: docker build -f ./dockerfile .
+          command: docker build -f ./dockerfile -t my_app:$CIRCLE_BRANCH .
       - run: docker image ls
-      - persist_to_workspace:
-                    root: ./
-                    paths:
-                        - ./
-
+      - run: mkdir -p docker-cache
+      - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
+      - save_cache:
+          key: docker_cache_key
+          paths:
+            - docker-cache
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
     steps:
+      - restore_docker_cache
       - attach_workspace:
           at: ./
       - run: ls -al
@@ -44,6 +46,7 @@ jobs:
       - run: 
           name: Deploy
           command: |
+            docker load < docker-cache/built-image.tar
             docker image ls
       #- setup_remote_docker
       #- run: docker image ls
