@@ -33,15 +33,15 @@ jobs:
       - save_cache:
           key: docker_cache_key
           paths:
-            - docker-cache
-          force: yes
+            - docker-cache-{$CIRCLE_SHA1}
+            
   test:
     <<: *workdirAndImage
     working_directory: ~/workspace/repo
     steps:
       - restore_cache:
           keys:
-            - docker_cache
+            - docker-cache-{$CIRCLE_SHA1}
       - attach_workspace:
           at: ./
       - run: ls -al
