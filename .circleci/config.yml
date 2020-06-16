@@ -39,10 +39,10 @@ jobs:
       - persist_to_workspace:
           # Must be an absolute path, or relative path from working_directory. This is a directory on the container which is 
           # taken to be the root directory of the workspace.
-          root: docker-cache
+          root: root/workspace/repo
           # Must be relative path from root
           paths:
-            - ./docker-cache
+            - /docker-cache/
       - run: pwd
       - run: ls -al
   test:
@@ -51,7 +51,7 @@ jobs:
     steps:
       - run: pwd
       - attach_workspace:
-          at: ~/workspace/cachedimage
+          at: root/workspace/repo
       - run: pwd
       - run: ls -al
       - setup_remote_docker    
