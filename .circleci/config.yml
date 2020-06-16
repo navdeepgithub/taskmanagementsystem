@@ -72,6 +72,7 @@ jobs:
       - run: ls -al
       - attach_workspace:
           at: /root/workspace/repo
+      - setup_remote_docker
       - run: docker login -u navdeepsinghghotra -p Infy@123
       - run: docker push my_app:$CIRCLE_BRANCH
       #- run: |
