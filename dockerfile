@@ -1,5 +1,6 @@
-FROM openjdk:8u131-jre-alpine
-ENV HW_HOME=/opt/hello-world
-ADD HelloWorld.class $HW_HOME/
-WORKDIR $HW_HOME
-ENTRYPOINT ["java", "HelloWorld"]
+FROM node:12
+WORKDIR /app
+ADD . /app
+RUN npm install
+EXPOSE 3000
+CMD npm start
