@@ -23,7 +23,7 @@ jobs:
           ls -al
       - setup_remote_docker
       - run: docker login -u navdeepsinghghotra -p Infy@123
-      #- run: docker version #build -f ~/workspace/dockerfile .
+      - run: docker version #build -f ~/workspace/dockerfile .
 
   test:
     <<: *workdirAndImage
