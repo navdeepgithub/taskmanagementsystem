@@ -29,10 +29,10 @@ jobs:
       - run: docker version #build -f ~/workspace/dockerfil e .
       - run:
           name: use the dockerfile
-          command: docker build -f ./dockerfile -t my_app:$CIRCLE_BRANCH .
+          command: docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$CIRCLE_BRANCH .
       - run: docker image ls
       - run: mkdir -p docker-cache
-      - run: docker save -o docker-cache/built-image.tar my_app:$CIRCLE_BRANCH
+      - run: docker save -o docker-cache/built-image.tar navdeepsinghghotra/my_app:$CIRCLE_BRANCH
       - run: pwd
       - run: ls -al
       - run: pwd
