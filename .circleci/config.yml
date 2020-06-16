@@ -74,6 +74,7 @@ jobs:
           at: /root/workspace/repo
       - run: ls -al
       - setup_remote_docker
+      - run: docker load < docker-cache/built-image.tar
       - run: docker image ls
       - run: docker login -u navdeepsinghghotra -p Infy@123
       - run: docker push my_app:$CIRCLE_BRANCH
