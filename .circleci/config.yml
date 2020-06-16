@@ -49,9 +49,8 @@ jobs:
       - run: 
           name: Deploy
           command: |
-            docker load < docker-cache/built-image.tar
+            docker load < docker-cache-{$CIRCLE_SHA1}/built-image.tar
             docker image ls
-            rm -f < docker-cache/built-image.tar
       #- setup_remote_docker
       #- run: docker image ls
       
