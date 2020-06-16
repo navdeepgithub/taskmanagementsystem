@@ -39,6 +39,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ./
+      - run: ls -al
       - setup_remote_docker    
       - run: 
           name: Deploy
