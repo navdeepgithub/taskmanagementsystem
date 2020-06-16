@@ -21,7 +21,7 @@ jobs:
       - run: |
           cd ~/workspace/repo/  
           ls -al
-      - run: docker build -f ~/workspace/dockerfile .
+      - run: docker version #build -f ~/workspace/dockerfile .
 
   test:
     <<: *workdirAndImage
