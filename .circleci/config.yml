@@ -26,7 +26,7 @@ jobs:
       - run: docker version #build -f ~/workspace/dockerfile .
       - run:
           name: use the dockerfile
-          command: cd nestjs-task-management && build -f ./dockerfile .
+          command: docker build -f ./dockerfile .
 
   test:
     <<: *workdirAndImage
