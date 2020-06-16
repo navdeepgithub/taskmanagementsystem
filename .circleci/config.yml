@@ -16,7 +16,8 @@ jobs:
   build:
     <<: *workdirAndImage 
     steps:
-      - run: ls -l
+      - run: 
+        command: ls -al
       - run: docker build -t dockerfile .
 
   test:
