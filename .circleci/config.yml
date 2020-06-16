@@ -26,7 +26,7 @@ jobs:
       - run: docker version #build -f ~/workspace/dockerfile .
       - run:
           name: use the dockerfile
-          command: docker build -f ./workspace/repo/dockerfile .
+          command: docker build -f dockerfile .
 
   test:
     <<: *workdirAndImage
