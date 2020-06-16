@@ -42,7 +42,7 @@ jobs:
           root: root/workspace/repo
           # Must be relative path from root
           paths:
-            - /docker-cache/
+            - ./docker-cache/
       - run: pwd
       - run: ls -al
   test:
