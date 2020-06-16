@@ -18,7 +18,9 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/workspace/repo/
-      - run: ls -al
+      - run: |
+          cd ~/workspace/repo/  
+          ls -al
       - run: docker build -f ./repo/dockerfile .
 
   test:
