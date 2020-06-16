@@ -17,6 +17,7 @@ jobs:
     <<: *workdirAndImage 
     working_directory: ~/workspace/repo
     steps:
+      - checkout
       - attach_workspace:
           at: ~/workspace
       - run: ls -al
