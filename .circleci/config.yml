@@ -6,7 +6,7 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.0.0
+    default: 0.0.1
   image-name:
     type: string
     default: infra-monitor
