@@ -12,9 +12,11 @@ jobs:
   build:
     <<: *Image
     environment:
-    IMAGETAG: << pipeline.parameters.image-tag >>
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
+      - run: echo "This is pipeline ID << pipeline.id >>"
+      - run: echo $IMAGETAG
       - checkout
       - attach_workspace:
           at: ~/workspace
