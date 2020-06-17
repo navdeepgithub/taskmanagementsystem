@@ -2,12 +2,13 @@
 defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
+
+version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.1.$pipeline.number
+    default: 0.1.
 
-version: 2
 jobs:
   build:
     <<: *Image
@@ -15,7 +16,7 @@ jobs:
       IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
-      - run: echo "This is pipeline ID << pipeline.id >>"
+      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo $IMAGETAG
       - checkout
       - attach_workspace:
@@ -24,9 +25,9 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$IMAGETAG .
+            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >> .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$IMAGETAG
+            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
@@ -34,7 +35,7 @@ jobs:
   test:
     <<: *Image
     environment:
-    IMAGETAG: << pipeline.parameters.image-tag >>
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
@@ -51,7 +52,7 @@ jobs:
   push_docker_image:
     <<: *Image
     environment:
-    IMAGETAG: << pipeline.parameters.image-tag >>
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
