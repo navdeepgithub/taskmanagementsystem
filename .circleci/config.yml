@@ -7,13 +7,13 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.1.
+    default: 0.1.${CIRCLE_WORKFLOW_ID}
 
 jobs:
   build:
     <<: *Image
     environment:
-      IMAGETAG: << pipeline.parameters.image-tag >>{$CIRCLE_WORKFLOW_ID}
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
