@@ -6,7 +6,7 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.1.${CIRCLE_WORKFLOW_ID}
+    default: 0.0.0
   image-name:
     type: string
     default: infra-monitor
@@ -17,14 +17,14 @@ jobs:
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - run: echo $envname
       - checkout
       - setup_remote_docker
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
-            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+            BUILD_DATE=`date -u +%Y-%m-%d`
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
+            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
             docker rm --force testcontainer
 
   buildandpushimage:
@@ -37,10 +37,11 @@ jobs:
       - run:
           name: build and tag image from dockerfile, push to dockerhub
           command: |
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
+            BUILD_DATE=`date -u +%Y-%m-%d`
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
             docker image ls
             docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
 
 workflows:
   version: 2
