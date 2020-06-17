@@ -18,7 +18,7 @@ jobs:
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo $envname
-      - run: DATENOW=date
+      - run: date > DATENOW
       - run: echo $DATENOW 
       - checkout
       - setup_remote_docker
