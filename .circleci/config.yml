@@ -37,10 +37,11 @@ jobs:
       - run:
           name: build and tag image from dockerfile, push to dockerhub
           command: |
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
+            BUILD_DATE=`date -u +%Y-%m-%d`
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
             docker image ls
             docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
 
 workflows:
   version: 2
