@@ -64,9 +64,7 @@ workflows:
             branches:
               ignore: master
       - buildandpushimage:
-          requires:
-            - buildandtest
+          context: contextlive
           filters:
             branches:
               only: master
-          context: contextlive
