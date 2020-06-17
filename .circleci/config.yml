@@ -80,6 +80,8 @@ workflows:
             branches:
               ignore: master
       - push_docker_image:
+          requires:
+            - build
           filters:
             branches:
               only: master
