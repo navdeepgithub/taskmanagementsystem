@@ -38,6 +38,7 @@ jobs:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
+      - checkout
       - run: echo $envname
       - setup_remote_docker
       - run:
