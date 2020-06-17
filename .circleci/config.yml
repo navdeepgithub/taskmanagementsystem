@@ -14,9 +14,10 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$CIRCLE_BRANCH .
+            TAG=0.1.$CIRCLE_BUILD_NUM
+            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$TAG .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$CIRCLE_BRANCH
+            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$TAG
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
@@ -32,7 +33,7 @@ jobs:
           name: Start Test container and run some tests
           command: |
             docker load < docker-imagestore/built-image.tar
-            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:$CIRCLE_BRANCH
+            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:$TAG
             docker rm --force testcontainer
 
   push_docker_image:
@@ -48,7 +49,7 @@ jobs:
             docker load < docker-imagestore/built-image.tar
             docker image ls
             docker login -u navdeepsinghghotra -p Infy@123
-            docker push navdeepsinghghotra/my_app:$CIRCLE_BRANCH
+            docker push navdeepsinghghotra/my_app:$TAG
 
 workflows:
   version: 2
