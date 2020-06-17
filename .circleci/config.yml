@@ -6,7 +6,7 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.1.
+    default: 0.1.${date}
   image-name:
     type: string
     default: infra-monitor
@@ -18,13 +18,15 @@ jobs:
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo $envname
+      - run: BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”`
+      - run: echo $BUILD_DATE
       - checkout
       - setup_remote_docker
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.`date -u +”%Y-%m-%dT%H:%M:%SZ”`  .
-            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.`date -u +”%Y-%m-%dT%H:%M:%SZ”` 
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
+            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
   buildandpushimage:
