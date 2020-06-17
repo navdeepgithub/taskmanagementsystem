@@ -24,13 +24,6 @@ jobs:
           name: build and tag image from dockerfile, store to folder docker-imagestore
           command: |
             docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
-            mkdir -p docker-imagestore
-            docker save -o docker-imagestore/<< pipeline.parameters.image-name >>-image.tar ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
-      - run:
-          name: Start Test container and run sanity tests
-          command: |
-            docker load < docker-imagestore/<< pipeline.parameters.image-name >>-image.tar
-            docker image ls
             docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
