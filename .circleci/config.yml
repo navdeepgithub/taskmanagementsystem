@@ -38,6 +38,8 @@ jobs:
       IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
+      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: echo $IMAGETAG
       - attach_workspace:
           at: /root/workspace/repo
       - setup_remote_docker
