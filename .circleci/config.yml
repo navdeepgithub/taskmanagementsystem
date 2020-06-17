@@ -1,11 +1,10 @@
-defaults: &workdirAndImage
-  working_directory: ~/workspace
+defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
 version: 2
 jobs:
   build:
-    <<: *workdirAndImage
+    <<: *Image
     working_directory: ~/workspace/repo
     steps:
       - checkout
@@ -13,33 +12,31 @@ jobs:
           at: ~/workspace
       - setup_remote_docker
       - run:
-          name: build image from dockerfile
-          command: docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$CIRCLE_BRANCH .
-      - run:
-          name: store docker image
+          name: build and store image from dockerfile to docker-imagestore
           command: |
-            mkdir -p docker-cache
-            docker save -o docker-cache/built-image.tar navdeepsinghghotra/my_app:$CIRCLE_BRANCH
+            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$CIRCLE_BRANCH .
+            mkdir -p docker-imagestore
+            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$CIRCLE_BRANCH
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
-            - ./docker-cache/
+            - ./docker-imagestore/
   test:
-    <<: *workdirAndImage
+    <<: *Image
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
           at: /root/workspace/repo
       - setup_remote_docker
       - run:
-          name: Deploy
+          name: Start Test container and run some tests
           command: |
-            docker load < docker-cache/built-image.tar
+            docker load < docker-imagestore/built-image.tar
             docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:$CIRCLE_BRANCH
             docker rm --force testcontainer
 
   push_docker_image:
-    <<: *workdirAndImage
+    <<: *Image
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
@@ -48,7 +45,7 @@ jobs:
       - run:
           name: Get the image and push to dockerhub
           command: |
-            docker load < docker-cache/built-image.tar
+            docker load < docker-imagestore/built-image.tar
             docker image ls
             docker login -u navdeepsinghghotra -p Infy@123
             docker push navdeepsinghghotra/my_app:$CIRCLE_BRANCH
@@ -65,8 +62,6 @@ workflows:
             branches:
               ignore: master
       - push_docker_image:
-          requires:
-            - build
           filters:
             branches:
               only: master
