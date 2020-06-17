@@ -6,7 +6,7 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.0.2
+    default: 0.0.3
   image-name:
     type: string
     default: infra-monitor
@@ -40,7 +40,7 @@ jobs:
           command: |
             BUILD_DATE=`date -u +%Y-%m-%d`
             docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
-            docker image ls
+            docker image ls 
             docker login -u ${dockerhubusername} -p ${dockerhubpassword}
             docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
 
