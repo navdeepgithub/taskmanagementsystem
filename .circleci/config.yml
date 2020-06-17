@@ -2,12 +2,13 @@
 defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
+version: 2.1
+
 parameters:
   image-tag:
     type: string
     default: 0.1.$pipeline.number
 
-version: 2
 jobs:
   build:
     <<: *Image
