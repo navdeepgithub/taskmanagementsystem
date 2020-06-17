@@ -25,9 +25,9 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >> .
+            docker build -f ./dockerfile -t ${dockerusername}/my_app:<< pipeline.parameters.image-tag >> .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
+            docker save -o docker-imagestore/built-image.tar ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
@@ -48,7 +48,7 @@ jobs:
           command: |
             docker load < docker-imagestore/built-image.tar
             docker image ls
-            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
+            docker run --publish 3000:3000 --detach --name testcontainer ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
   push_docker_image:
@@ -65,8 +65,8 @@ jobs:
           command: |
             docker load < docker-imagestore/built-image.tar
             docker image ls
-            docker login -u navdeepsinghghotra -p Infy@123
-            docker push navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
+            docker login -u ${dockerusername} -p ${dockerpassword}
+            docker push ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
 
 workflows:
   version: 2
