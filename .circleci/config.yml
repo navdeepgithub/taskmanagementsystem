@@ -48,7 +48,7 @@ jobs:
           command: |
             docker load < docker-imagestore/built-image.tar
             docker image ls
-            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:$IMAGETAG
+            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
   push_docker_image:
@@ -66,7 +66,7 @@ jobs:
             docker load < docker-imagestore/built-image.tar
             docker image ls
             docker login -u navdeepsinghghotra -p Infy@123
-            docker push navdeepsinghghotra/my_app:$IMAGETAG
+            docker push navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
 
 workflows:
   version: 2
