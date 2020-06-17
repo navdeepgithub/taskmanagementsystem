@@ -12,70 +12,61 @@ parameters:
     default: infra-monitor
 
 jobs:
-  build:
+  buildandtest:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: echo $envname
       - checkout
-      - attach_workspace:
-          at: ~/workspace
       - setup_remote_docker
       - run:
-          name: build and store image from dockerfile to docker-imagestore
+          name: build and tag image from dockerfile, store to folder docker-imagestore
           command: |
-            docker build -f ./dockerfile -t ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
-      - persist_to_workspace:
-          root: /root/workspace/repo
-          paths:
-            - ./docker-imagestore/
-  test:
-    <<: *Image
-    working_directory: ~/workspace/repo
-    steps:
-      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - attach_workspace:
-          at: /root/workspace/repo
-      - setup_remote_docker
+            docker save -o docker-imagestore/<< pipeline.parameters.image-name >>-image.tar ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
       - run:
-          name: Start Test container and run some tests
+          name: Start Test container and run sanity tests
           command: |
-            docker load < docker-imagestore/built-image.tar
+            docker load < docker-imagestore/<< pipeline.parameters.image-name >>-image.tar
             docker image ls
-            docker run --publish 3000:3000 --detach --name testcontainer ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
-  push_docker_image:
+  buildandpushimage:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
-      - attach_workspace:
-          at: /root/workspace/repo
+      - run: echo $envname
       - setup_remote_docker
       - run:
-          name: Get the image and push to dockerhub
+          name: build and tag image from dockerfile, store to folder docker-imagestore
           command: |
-            docker load < docker-imagestore/built-image.tar
+            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
+            mkdir -p docker-imagestore
+            docker save -o docker-imagestore/<< pipeline.parameters.image-name >>-image.tar ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+      - run:    
+          name: push to dockerhub
+          command: |
+            docker load < docker-imagestore/<< pipeline.parameters.image-name >>-image.tar
             docker image ls
-            docker login -u ${dockerusername} -p ${dockerpassword}
-            docker push ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
+            docker login -u ${dockerhubusername} -p ${dockerhubpassword}
+            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
 
 workflows:
   version: 2
   build_test_and_deploy:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - buildandtest:
+          context: contextprestage
           filters:
             branches:
               ignore: master
-      - push_docker_image:
+      - buildandpushimage:
           requires:
-            - build
+            - buildandtest
           filters:
             branches:
               only: master
+          context: contextlive
