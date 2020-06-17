@@ -2,13 +2,12 @@
 defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
-version: 2.1
-
 parameters:
   image-tag:
     type: string
     default: 0.1.$pipeline.number
 
+version: 2
 jobs:
   build:
     <<: *Image
@@ -23,7 +22,6 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            TAG=
             docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$IMAGETAG .
             mkdir -p docker-imagestore
             docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$IMAGETAG
