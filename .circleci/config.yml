@@ -1,12 +1,23 @@
+
 defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
-version: 2
+
+version: 2.1
+parameters:
+  image-tag:
+    type: string
+    default: 0.1.${CIRCLE_WORKFLOW_ID}
+
 jobs:
   build:
     <<: *Image
+    environment:
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
+      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: echo $IMAGETAG
       - checkout
       - attach_workspace:
           at: ~/workspace
@@ -14,32 +25,36 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
-            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:$TAG .
+            docker build -f ./dockerfile -t navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >> .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:$TAG
+            docker save -o docker-imagestore/built-image.tar navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
             - ./docker-imagestore/
   test:
     <<: *Image
+    environment:
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
+      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: echo $IMAGETAG
       - attach_workspace:
           at: /root/workspace/repo
       - setup_remote_docker
       - run:
           name: Start Test container and run some tests
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
             docker load < docker-imagestore/built-image.tar
             docker image ls
-            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:$TAG
+            docker run --publish 3000:3000 --detach --name testcontainer navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
   push_docker_image:
     <<: *Image
+    environment:
+      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
@@ -48,11 +63,10 @@ jobs:
       - run:
           name: Get the image and push to dockerhub
           command: |
-            TAG=0.1.$CIRCLE_BUILD_NUM
             docker load < docker-imagestore/built-image.tar
             docker image ls
             docker login -u navdeepsinghghotra -p Infy@123
-            docker push navdeepsinghghotra/my_app:$TAG
+            docker push navdeepsinghghotra/my_app:<< pipeline.parameters.image-tag >>
 
 workflows:
   version: 2
