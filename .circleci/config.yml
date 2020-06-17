@@ -1,4 +1,3 @@
-
 defaults: &Image
   docker:
     - image: docker:17.05.0-ce-git
@@ -8,16 +7,16 @@ parameters:
   image-tag:
     type: string
     default: 0.1.${CIRCLE_WORKFLOW_ID}
+  image-name:
+    type: string
+    default: infra-monitor
 
 jobs:
   build:
     <<: *Image
-    environment:
-      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - run: echo $IMAGETAG
       - checkout
       - attach_workspace:
           at: ~/workspace
@@ -25,21 +24,18 @@ jobs:
       - run:
           name: build and store image from dockerfile to docker-imagestore
           command: |
-            docker build -f ./dockerfile -t ${dockerusername}/my_app:<< pipeline.parameters.image-tag >> .
+            docker build -f ./dockerfile -t ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >> .
             mkdir -p docker-imagestore
-            docker save -o docker-imagestore/built-image.tar ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
+            docker save -o docker-imagestore/built-image.tar ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
       - persist_to_workspace:
           root: /root/workspace/repo
           paths:
             - ./docker-imagestore/
   test:
     <<: *Image
-    environment:
-      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - run: echo $IMAGETAG
       - attach_workspace:
           at: /root/workspace/repo
       - setup_remote_docker
@@ -48,13 +44,11 @@ jobs:
           command: |
             docker load < docker-imagestore/built-image.tar
             docker image ls
-            docker run --publish 3000:3000 --detach --name testcontainer ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
+            docker run --publish 3000:3000 --detach --name testcontainer ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
             docker rm --force testcontainer
 
   push_docker_image:
     <<: *Image
-    environment:
-      IMAGETAG: << pipeline.parameters.image-tag >>
     working_directory: ~/workspace/repo
     steps:
       - attach_workspace:
@@ -66,7 +60,7 @@ jobs:
             docker load < docker-imagestore/built-image.tar
             docker image ls
             docker login -u ${dockerusername} -p ${dockerpassword}
-            docker push ${dockerusername}/my_app:<< pipeline.parameters.image-tag >>
+            docker push ${dockerusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>
 
 workflows:
   version: 2
