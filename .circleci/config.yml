@@ -17,9 +17,12 @@ jobs:
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - run: echo $envname
-      - run: date > DATENOW
-      - run: echo $DATENOW 
+      - run: 
+          name: get build date
+          command: |
+            BUILD_DATE=`date -u +”%Y-%m-%dT%H:%M:%SZ”`
+            echo $BUILD_DATE
+      - run: DATENOW=`date` 
       - checkout
       - setup_remote_docker
       - run:
