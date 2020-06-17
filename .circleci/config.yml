@@ -7,7 +7,7 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.1.{$pipeline.id}
+    default: 0.1.$pipeline.id
 
 jobs:
   build:
