@@ -35,7 +35,7 @@ jobs:
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
-      - run: echo "This is docker image tag -->$TAG_LATEST"
+      - run: echo $TAG_LATEST
       - checkout
       - setup_remote_docker
       - run: *setup-image-name-tag
