@@ -27,34 +27,17 @@ jobs:
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
             docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
             docker rm --force testcontainer
-
-  buildandpushimage:
-    <<: *Image
-    working_directory: ~/workspace/repo
-    steps:
-      - checkout
-      - run: echo $envname
-      - setup_remote_docker
       - run:
-          name: build and tag image from dockerfile, push to dockerhub
+          name: push to dockerhub
           command: |
-            BUILD_DATE=`date -u +%Y-%m-%d`
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
-            docker image ls
-            docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
-
+            if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
+              docker login -u ${dockerhubusername} -p ${dockerhubpassword}
+              docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
+            fi
+            
 workflows:
   version: 2
   build_test_and_deploy:
     jobs:
       - buildandtest:
           context: contextprestage
-          filters:
-            branches:
-              ignore: master
-      - buildandpushimage:
-          context: contextlive
-          filters:
-            branches:
-              only: master
