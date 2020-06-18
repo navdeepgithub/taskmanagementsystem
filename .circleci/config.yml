@@ -23,21 +23,21 @@ jobs:
           name: build and tag image from dockerfile, run sanity tests
           command: |
             echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
-            TAG_LATEST="nilbydefault"
+            TAG_LATEST=nilbydefault
             echo "TAG_LATEST=${TAG_LATEST}
             if [ ${CIRCLE_BRANCH} == "master" ]; then
               TAG_LATEST=<< pipeline.parameters.image-tag >>
               echo "master building with tag: << pipeline.parameters.image-tag >>"
             else
               if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
-                TAG_LATEST="latest"
+                TAG_LATEST=latest
                 echo "Sandbox building with tag: latest"
               fi
             fi
             echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
-            if [ ${TAG_LATEST}} == "nilbydefault" ]; then
+            if [ $TAG_LATEST = nilbydefault ]; then
               echo "This is neither Sandbox not Master, so will not push image"
               circleci-agent step halt
             else
