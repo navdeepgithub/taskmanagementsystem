@@ -34,6 +34,7 @@ jobs:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
+      - run: *setup-image-name-tag
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo $TAG_LATEST
       - checkout
@@ -41,7 +42,6 @@ jobs:
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
-            *setup-image-name-tag
             echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault
