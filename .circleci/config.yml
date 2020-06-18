@@ -24,7 +24,7 @@ jobs:
           command: |
             echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
             TAG_LATEST=nilbydefault
-            echo "TAG_LATEST=${TAG_LATEST}
+            echo "TAG_LATEST=${TAG_LATEST}"
             if [ ${CIRCLE_BRANCH} == "master" ]; then
               TAG_LATEST=<< pipeline.parameters.image-tag >>
               echo "master building with tag: << pipeline.parameters.image-tag >>"
