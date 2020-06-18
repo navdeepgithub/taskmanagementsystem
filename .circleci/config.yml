@@ -43,8 +43,8 @@ jobs:
           name: build and tag image from dockerfile, run sanity tests
           command: |
             echo $TAG_LATEST
-            docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
-            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
+            docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault .
+            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault
             if [ $TAG_LATEST = nilbydefault ]; then
               echo "This is neither Sandbox not Master, so will not push image"
             else
