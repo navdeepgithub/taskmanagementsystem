@@ -38,10 +38,10 @@ jobs:
       - run: echo $TAG_LATEST
       - checkout
       - setup_remote_docker
-      - run: *setup-image-name-tag
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
+            *setup-image-name-tag
             echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:nilbydefault
