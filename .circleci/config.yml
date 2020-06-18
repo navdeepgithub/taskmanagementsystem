@@ -22,24 +22,27 @@ jobs:
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
-            BUILD_DATE=`date -u +%Y-%m-%d`
-            docker build -f ./dockerfile -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE .
-            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
-            docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
-            docker rm --force testcontainer
-            if ["${CIRCLE_BRANCH}" != "master"]; then
-              echo "comes in if loop !master"
-              docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-              docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
+            echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+            TAG_LATEST=nildonotuse
+            if [ ${CIRCLE_BRANCH} == "master" ]; then
+              TAG_LATEST=<< pipeline.parameters.image-tag >>
+              echo "master building with tag: << pipeline.parameters.image-tag >>"
+            else
+              if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
+                TAG_LATEST="latest"
+                echo "Sandbox building with tag: latest"
+              fi
             fi
-      - run:
-          name: pushto docker
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              echo "comes in if loop master"
-              docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-              docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
-            fi      
+
+            docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
+            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
+            if [$TAG_LATEST =="nildonotuse"]; then
+              echo "This is neither Sandbox not Master, so will not push image"
+              circleci-agent step halt
+            fi            
+            docker login -u ${dockerhubusername} -p ${dockerhubpassword}
+            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:TAG_LATEST
+            
 workflows:
   version: 2
   build_test_and_deploy:
