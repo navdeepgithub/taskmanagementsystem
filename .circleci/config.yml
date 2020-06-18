@@ -34,6 +34,8 @@ jobs:
               fi
             fi
             echo $TAG_LATEST
+            echo "export TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
+            source ${BASH_ENV}
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
             if [$TAG_LATEST == "nilbydefault"]; then
