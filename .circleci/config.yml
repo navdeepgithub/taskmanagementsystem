@@ -12,6 +12,8 @@ parameters:
     default: infra-monitor
 
 setup-image-name-tag: &setup-image-name-tag
+  docker:
+    - image: docker:17.05.0-ce-git
   name: Setup APP_TAG environment variable
   command: |
     echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
