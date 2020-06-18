@@ -36,7 +36,7 @@ jobs:
             echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
-            if [$TAG_LATEST = "nilbydefault"]; then
+            if ["$TAG_LATEST" = "nilbydefault"]; then
               echo "This is neither Sandbox not Master, so will not push image"
               circleci-agent step halt
             fi            
