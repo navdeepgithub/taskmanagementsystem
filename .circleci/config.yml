@@ -27,14 +27,16 @@ jobs:
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
             docker run --publish 3000:3000 --detach --name testcontainer ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE
             docker rm --force testcontainer
-            if [[ "$ {CIRCLE_BRANCH}" == "master" ]]; then
+            if ["${CIRCLE_BRANCH}" != "master"]; then
+              echo "comes in if loop !master"
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
             fi
       - run:
           name: pushto docker
           command: |
-            if [[ "$ {CIRCLE_BRANCH}" == "master" ]]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              echo "comes in if loop master"
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
             fi      
