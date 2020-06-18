@@ -30,7 +30,7 @@ jobs:
       - run:
           name: push to dockerhub
           command: |
-            echo "$ {CIRCLE_BRANCH}"
+            echo $ {CIRCLE_BRANCH}
             if [ "$ {CIRCLE_BRANCH}" == "master" ]; 
             then
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
