@@ -30,7 +30,9 @@ jobs:
       - run:
           name: push to dockerhub
           command: |
-            if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
+            echo $ {CIRCLE_BRANCH}
+            if [ "$ {CIRCLE_BRANCH}" == "master" ]; 
+            then
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:<< pipeline.parameters.image-tag >>.$BUILD_DATE 
             fi
