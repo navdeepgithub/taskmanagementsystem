@@ -39,8 +39,7 @@ jobs:
       - run: *setup-image-name-tag
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo "TAG_LATEST=${TAG_LATEST}"
-      - checkout
-      
+
 workflows:
   version: 2
   build_test_push:
