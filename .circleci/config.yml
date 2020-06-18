@@ -28,15 +28,14 @@ setup-image-name-tag: &setup-image-name-tag
         echo "Sandbox building with tag: latest"
       fi
     fi
-    echo "export TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
-    source ${BASH_ENV}
-    echo "TAG_LATEST=${TAG_LATEST}"
+    echo "export TAG_LATEST=${TAG_LATEST}"
 jobs:
   buildandtest:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: echo "This is docker image tag -->$TAG_LATEST"
       - checkout
       - setup_remote_docker
       - run: *setup-image-name-tag
