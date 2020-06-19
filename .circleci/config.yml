@@ -14,7 +14,6 @@ parameters:
 setup-image-name-tag: &setup-image-name-tag
   name: Setup TAG environment variable for << pipeline.parameters.image-name >> 
   command: |
-    DOCKER_TAG=${CIRCLE_BRANCH}
     if [ ${CIRCLE_BRANCH} == "master" ]; then
       DOCKER_TAG=<< pipeline.parameters.image-tag >>
     else
