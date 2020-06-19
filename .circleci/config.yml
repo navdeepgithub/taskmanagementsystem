@@ -24,8 +24,6 @@ setup-image-name-tag: &setup-image-name-tag
       if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
         TAG_LATEST=latest
         echo "Sandbox building with tag: latest"
-      else 
-        << pipeline.parameters.image-name >> = << pipeline.parameters.image-tag >>-branch
       fi
     fi
     echo "export APP_TAG=${APP_TAG}" >> ~/.bashrc
