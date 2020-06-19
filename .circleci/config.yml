@@ -37,6 +37,7 @@ jobs:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
+      - run: source {BASH_ENV}
       - run: *setup-image-name-tag
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: source ${BASH_ENV}
