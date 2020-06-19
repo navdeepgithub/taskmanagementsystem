@@ -12,30 +12,25 @@ parameters:
     default: infra-monitor
 
 setup-image-name-tag: &setup-image-name-tag
-  name: Setup TAG environment variable for << pipeline.parameters.image-tag >> 
+  name: Setup TAG environment variable for << pipeline.parameters.image-name >> 
   command: |
-    echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
     TAG_LATEST=${CIRCLE_BRANCH}
-    echo "TAG_LATEST=${TAG_LATEST}"
     if [ ${CIRCLE_BRANCH} == "master" ]; then
       TAG_LATEST=<< pipeline.parameters.image-tag >>
-      echo "master building with tag: << pipeline.parameters.image-tag >>"
     else
       if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
         TAG_LATEST=latest
-        echo "Sandbox building with tag: latest"
       fi
     fi
     echo "export APP_TAG=${APP_TAG}" >> ~/.bashrc
     echo "export TAG_LATEST=${TAG_LATEST}" >> ~/.bashrc
     source ~/.bashrc
-    echo "TAG_LATEST=${TAG_LATEST}"
+    echo "Info: Tag created for << pipeline.parameters.image-name >>:TAG_LATEST=${TAG_LATEST} Branch: ${CIRCLE_BRANCH} branch"
 jobs:
   buildandtest:
     <<: *Image
     working_directory: ~/workspace/repo
     steps:
-      - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - checkout
       - setup_remote_docker
       - run: *setup-image-name-tag
@@ -43,15 +38,14 @@ jobs:
           name: build and tag image from dockerfile
           command: |
             source ~/.bashrc
-            echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
             if [ $TAG_LATEST = ${CIRCLE_BRANCH} ]; then
-              echo "This is neither Sandbox not Master, so will not push image"
+              echo "Neither Sandbox nor Master, image must not be pushed"
             else
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
-              echo "push to dockerhub for << pipeline.parameters.image-name >> from ${CIRCLE_BRANCH} with tag $TAG_LATEST completed successfully"
+              echo "Success: Push to dockerhub for << pipeline.parameters.image-name >>:TAG_LATEST=${TAG_LATEST} Branch: ${CIRCLE_BRANCH} branch"
             fi
 
 workflows:
