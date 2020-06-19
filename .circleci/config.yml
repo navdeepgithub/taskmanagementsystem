@@ -17,6 +17,7 @@ jobs:
     working_directory: ~/workspace/repo
     steps:
       - checkout
+      - setup_remote_docker
       - run: echo ${BASH_ENV}
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
       - run: echo ${BASH_ENV}
@@ -40,7 +41,6 @@ jobs:
             echo "export EXPORTED_TAG_LATEST=${TAG_LATEST}" >>$BASH_ENV
             source $BASH_ENV
             echo "EXPORTED_TAG_LATEST=${EXPORTED_TAG_LATEST}"
-      - setup_remote_docker
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
