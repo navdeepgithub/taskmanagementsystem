@@ -38,8 +38,8 @@ jobs:
               fi
             fi
             echo "TAG_LATEST=${TAG_LATEST}"
-            echo "export EXPORTED_TAG_LATEST=${TAG_LATEST}" >>$BASH_ENV
-            source $BASH_ENV
+            echo "export EXPORTED_TAG_LATEST=${TAG_LATEST}" >> ~/.bashrc
+            source ~/.bashrc
             echo "EXPORTED_TAG_LATEST=${EXPORTED_TAG_LATEST}"
             echo "latest tag is $EXPORTED_TAG_LATEST"
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
@@ -54,6 +54,7 @@ jobs:
       - run:
           name: Does the exported variables move to this stage
           command: |
+            source ~/.bashrc
             echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
             echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
             echo "EXPORTED_TAG_LATEST=${EXPORTED_TAG_LATEST}"
