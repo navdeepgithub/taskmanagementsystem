@@ -14,18 +14,17 @@ parameters:
 setup-image-name-tag: &setup-image-name-tag
   name: Setup TAG environment variable for << pipeline.parameters.image-name >> 
   command: |
-    TAG_LATEST=${CIRCLE_BRANCH}
+    DOCKER_TAG=${CIRCLE_BRANCH}
     if [ ${CIRCLE_BRANCH} == "master" ]; then
-      TAG_LATEST=<< pipeline.parameters.image-tag >>
+      DOCKER_TAG=<< pipeline.parameters.image-tag >>
     else
       if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
-        TAG_LATEST=latest
+        DOCKER_TAG=latest
       fi
     fi
-    echo "export APP_TAG=${APP_TAG}" >> ~/.bashrc
-    echo "export TAG_LATEST=${TAG_LATEST}" >> ~/.bashrc
+    echo "export DOCKER_TAG=${DOCKER_TAG}" >> ~/.bashrc
     source ~/.bashrc
-    echo "INFO: Tag created for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
+    echo "INFO: Tag created for << pipeline.parameters.image-name >>:${DOCKER_TAG}, Branch: ${CIRCLE_BRANCH}"
 jobs:
   buildandpush:
     <<: *Image
@@ -38,19 +37,21 @@ jobs:
           name: tag, build and push image << pipeline.parameters.image-name >>
           command: |
             source ~/.bashrc
-            docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
-            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
-            if [ $TAG_LATEST = ${CIRCLE_BRANCH} ]; then
-              echo "INFO: Push to dockerhub denied for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
-            else
-              docker login -u ${dockerhubusername} -p ${dockerhubpassword}
-              docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
-              echo "SUCCESS: Push to dockerhub for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
-            fi
+            docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG .
+            docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
+            docker login -u ${dockerhubusername} -p ${dockerhubpassword}
+            docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
+            echo "SUCCESS: Push to dockerhub for << pipeline.parameters.image-name >>:${DOCKER_TAG}, Branch: ${CIRCLE_BRANCH}"
+
 
 workflows:
   version: 2
   build_push:
     jobs:
       - buildandpush:
+          filters:
+            branches:
+              only:
+                - sandbox
+                - master
           context: contextprestage
