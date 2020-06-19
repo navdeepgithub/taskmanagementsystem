@@ -37,8 +37,8 @@ jobs:
               fi
             fi
             echo "TAG_LATEST=${TAG_LATEST}"
-            echo "export EXPORTED_TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
-            source ${BASH_ENV}
+            echo "export EXPORTED_TAG_LATEST=${TAG_LATEST}" >>$BASH_ENV
+            source $BASH_ENV
             echo "EXPORTED_TAG_LATEST=${EXPORTED_TAG_LATEST}"
       - setup_remote_docker
       - run:
