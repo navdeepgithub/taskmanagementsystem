@@ -28,7 +28,6 @@ setup-image-name-tag: &setup-image-name-tag
         echo "Sandbox building with tag: latest"
       fi
     fi
-    source ${BASH_ENV}
     echo "export TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
     source ${BASH_ENV}
     echo "TAG_LATEST=${TAG_LATEST}"
@@ -40,6 +39,7 @@ jobs:
     steps:
       - run: *setup-image-name-tag
       - run: echo "This is docker image ID << pipeline.parameters.image-tag >>"
+      - run: source ${BASH_ENV}
       - run: echo "TAG_LATEST={$TAG_LATEST}"
 
 workflows:
