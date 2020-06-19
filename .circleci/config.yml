@@ -12,8 +12,6 @@ parameters:
     default: infra-monitor
 
 setup-image-name-tag: &setup-image-name-tag
-  docker:
-    - image: docker:17.05.0-ce-git
   name: Setup tagname for << pipeline.parameters.image-name >>
   command: |
     echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
@@ -31,7 +29,6 @@ setup-image-name-tag: &setup-image-name-tag
     echo "TAG_LATEST=${TAG_LATEST}"
     echo "export TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
     echo ${BASH_ENV}
-    
     source ${BASH_ENV}
     echo "TAG_LATEST=${TAG_LATEST}"
 jobs:
