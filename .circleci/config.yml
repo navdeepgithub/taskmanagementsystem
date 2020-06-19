@@ -51,6 +51,13 @@ jobs:
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
               echo "push to dockerhub for << pipeline.parameters.image-name >> from ${CIRCLE_BRANCH} with tag $TAG_LATEST completed successfully"
             fi
+      - run:
+          name: Does the exported variables move to this stage
+          command: |
+            echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+            echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+            echo "EXPORTED_TAG_LATEST=${EXPORTED_TAG_LATEST}"
+            echo "latest tag is $EXPORTED_TAG_LATEST"
 
 workflows:
   version: 2
