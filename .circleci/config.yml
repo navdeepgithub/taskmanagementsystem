@@ -28,10 +28,10 @@ setup-image-name-tag: &setup-image-name-tag
         echo "Sandbox building with tag: latest"
       fi
     fi
+    echo "TAG_LATEST=${TAG_LATEST}"
     echo "export TAG_LATEST=${TAG_LATEST}" >> ${BASH_ENV}
     source ${BASH_ENV}
     echo "TAG_LATEST=${TAG_LATEST}"
-    
 jobs:
   buildandtest:
     <<: *Image
