@@ -38,7 +38,7 @@ jobs:
             source ~/.bashrc
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
-            docker run --rm ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG ls -alR
+            docker run --rm ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG ls -al
             docker login -u ${dockerhubusername} -p ${dockerhubpassword}
             docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
             echo "SUCCESS: Push to dockerhub for << pipeline.parameters.image-name >>:${DOCKER_TAG}, Branch: ${CIRCLE_BRANCH}"
