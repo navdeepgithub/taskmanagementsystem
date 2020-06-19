@@ -6,15 +6,13 @@ version: 2.1
 parameters:
   image-tag:
     type: string
-    default: 0.0.8
+    default: 0.0.0
   image-name:
     type: string
     default: infra-monitor
 
 setup-image-name-tag: &setup-image-name-tag
-  docker:
-    - image: docker:17.05.0-ce-git
-  name: Setup APP_TAG environment variable
+  name: Setup TAG environment variable for << pipeline.parameters.image-tag >> 
   command: |
     echo "CIRCLE_BRANCH=${CIRCLE_BRANCH}"
     TAG_LATEST=${CIRCLE_BRANCH}
@@ -26,6 +24,8 @@ setup-image-name-tag: &setup-image-name-tag
       if [ ${CIRCLE_BRANCH} == "sandbox" ]; then
         TAG_LATEST=latest
         echo "Sandbox building with tag: latest"
+      else 
+        << pipeline.parameters.image-name >> = << pipeline.parameters.image-tag >>-branch
       fi
     fi
     echo "export APP_TAG=${APP_TAG}" >> ~/.bashrc
