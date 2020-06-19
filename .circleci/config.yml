@@ -44,7 +44,7 @@ jobs:
       - run:
           name: build and tag image from dockerfile, run sanity tests
           command: |
-            echo $TAG_LATEST
+            echo "latest tag is $EXPORTED_TAG_LATEST"
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
             if [ $TAG_LATEST = nilbydefault ]; then
