@@ -22,7 +22,6 @@ setup-image-name-tag: &setup-image-name-tag
         TAG_LATEST=latest
       fi
     fi
-    echo "export APP_TAG=${APP_TAG}" >> ~/.bashrc
     echo "export TAG_LATEST=${TAG_LATEST}" >> ~/.bashrc
     source ~/.bashrc
     echo "INFO: Tag created for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
@@ -41,7 +40,7 @@ jobs:
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
             if [ $TAG_LATEST = ${CIRCLE_BRANCH} ]; then
-              echo "INFO: Push to dockerhub denied for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
+              echo "INFO: Push to dockerhub retricted for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH}"
             else
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
