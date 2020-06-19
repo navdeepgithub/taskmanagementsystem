@@ -41,7 +41,7 @@ jobs:
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
             if [ $TAG_LATEST = ${CIRCLE_BRANCH} ]; then
-              echo "Neither Sandbox nor Master, image must not be pushed"
+              echo "Info: Push to dockerhub denied for << pipeline.parameters.image-name >>:${TAG_LATEST}, Branch: ${CIRCLE_BRANCH} branch
             else
               docker login -u ${dockerhubusername} -p ${dockerhubpassword}
               docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
