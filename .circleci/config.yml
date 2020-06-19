@@ -46,7 +46,7 @@ jobs:
           command: |
             source ~/.bashrc
             echo $TAG_LATEST
-            TAG_LATEST="${{TAG_LATEST}:-${CIRCLE_BRANCH}}"
+            TAG_LATEST="${TAG_LATEST:CIRCLE_BRANCH}"
             echo $TAG_LATEST
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$TAG_LATEST
