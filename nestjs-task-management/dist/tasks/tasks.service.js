@@ -10,52 +10,54 @@ exports.TasksService = void 0;
 const common_1 = require("@nestjs/common");
 const tasks_model_1 = require("./tasks.model");
 const uuid_1 = require("uuid");
-let TasksService = (() => {
-    let TasksService = class TasksService {
-        constructor() {
-            this.tasks = [];
+let TasksService = class TasksService {
+    constructor() {
+        this.tasks = [];
+    }
+    getAllTasks() {
+        return this.tasks;
+    }
+    getTaskById(id) {
+        const found = this.tasks.find(task => task.id === id);
+        if (!found) {
+            throw new common_1.NotFoundException(`Task with id"${id}" not found`);
         }
-        getAllTasks() {
-            return this.tasks;
+        return found;
+    }
+    getTaskWithFilters(filterDto) {
+        const { status, search } = filterDto;
+        let tasks = this.getAllTasks();
+        if (status) {
+            tasks = tasks.filter(task => task.status === status);
         }
-        getTaskById(id) {
-            return this.tasks.find(task => task.id === id);
+        if (search) {
+            tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
         }
-        getTaskWithFilters(filterDto) {
-            const { status, search } = filterDto;
-            let tasks = this.getAllTasks();
-            if (status) {
-                tasks = tasks.filter(task => task.status === status);
-            }
-            if (search) {
-                tasks = tasks.filter(task => task.title.includes(search) || task.description.includes(search));
-            }
-            return tasks;
-        }
-        deleteTaskById(id) {
-            this.tasks = this.tasks.filter(task => task.id !== id);
-        }
-        updateTaskById(id, status) {
-            const task = this.getTaskById(id);
-            task.status = status;
-            return task;
-        }
-        createTask(createTaskDto) {
-            const { title, description } = createTaskDto;
-            const task = {
-                id: uuid_1.v4(),
-                title,
-                description,
-                status: tasks_model_1.TaskStatus.OPEN,
-            };
-            this.tasks.push(task);
-            return task;
-        }
-    };
-    TasksService = __decorate([
-        common_1.Injectable()
-    ], TasksService);
-    return TasksService;
-})();
+        return tasks;
+    }
+    deleteTaskById(id) {
+        const found = this.getTaskById(id);
+        this.tasks = this.tasks.filter(task => task.id !== found.id);
+    }
+    updateTaskById(id, status) {
+        const task = this.getTaskById(id);
+        task.status = status;
+        return task;
+    }
+    createTask(createTaskDto) {
+        const { title, description } = createTaskDto;
+        const task = {
+            id: uuid_1.v4(),
+            title,
+            description,
+            status: tasks_model_1.TaskStatus.OPEN,
+        };
+        this.tasks.push(task);
+        return task;
+    }
+};
+TasksService = __decorate([
+    common_1.Injectable()
+], TasksService);
 exports.TasksService = TasksService;
 //# sourceMappingURL=tasks.service.js.map
