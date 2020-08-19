@@ -10,16 +10,13 @@ exports.TasksModule = void 0;
 const common_1 = require("@nestjs/common");
 const tasks_controller_1 = require("./tasks.controller");
 const tasks_service_1 = require("./tasks.service");
-let TasksModule = (() => {
-    let TasksModule = class TasksModule {
-    };
-    TasksModule = __decorate([
-        common_1.Module({
-            controllers: [tasks_controller_1.TasksController],
-            providers: [tasks_service_1.TasksService]
-        })
-    ], TasksModule);
-    return TasksModule;
-})();
+let TasksModule = class TasksModule {
+};
+TasksModule = __decorate([
+    common_1.Module({
+        controllers: [tasks_controller_1.TasksController],
+        providers: [tasks_service_1.TasksService]
+    })
+], TasksModule);
 exports.TasksModule = TasksModule;
 //# sourceMappingURL=tasks.module.js.map

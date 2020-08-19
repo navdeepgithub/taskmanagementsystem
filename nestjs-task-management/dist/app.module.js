@@ -9,15 +9,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const tasks_module_1 = require("./tasks/tasks.module");
-let AppModule = (() => {
-    let AppModule = class AppModule {
-    };
-    AppModule = __decorate([
-        common_1.Module({
-            imports: [tasks_module_1.TasksModule],
-        })
-    ], AppModule);
-    return AppModule;
-})();
+let AppModule = class AppModule {
+};
+AppModule = __decorate([
+    common_1.Module({
+        imports: [tasks_module_1.TasksModule],
+    })
+], AppModule);
 exports.AppModule = AppModule;
 //# sourceMappingURL=app.module.js.map

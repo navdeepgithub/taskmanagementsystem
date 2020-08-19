@@ -14,7 +14,6 @@ parameters:
 setup-image-name-tag: &setup-image-name-tag
   name: Setup TAG environment variable for << pipeline.parameters.image-name >> 
   command: |
-    DOCKER_TAG=${CIRCLE_BRANCH}
     if [ ${CIRCLE_BRANCH} == "master" ]; then
       DOCKER_TAG=<< pipeline.parameters.image-tag >>
     else
@@ -39,6 +38,7 @@ jobs:
             source ~/.bashrc
             docker build -t ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG .
             docker image inspect ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
+            docker run --rm ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG ls -al
             docker login -u ${dockerhubusername} -p ${dockerhubpassword}
             docker push ${dockerhubusername}/<< pipeline.parameters.image-name >>:$DOCKER_TAG
             echo "SUCCESS: Push to dockerhub for << pipeline.parameters.image-name >>:${DOCKER_TAG}, Branch: ${CIRCLE_BRANCH}"
